@@ -8,17 +8,13 @@ import {
   Globe,
   User,
   BarChart3,
-  Target,
-  CheckCircle,
-  Tag,
-  Zap,
   Brain,
-  TextQuote,
-  Grab,
-  GraduationCap,
+  Pen,
+  Text,
+  SearchCode,
+  HelpCircle,
 } from "lucide-react";
 import SentimentChart from "./charts/SentimentChart";
-import ReadabilityChart from "./charts/ReadabilityChart";
 import EmotionChart from "./charts/EmotionChart";
 import "../styles/AnalysisPanel.css";
 
@@ -70,9 +66,11 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
     { id: "sentiment", label: "Sentiment", icon: TrendingUp },
     { id: "emotions", label: "Emotions", icon: Heart },
     { id: "entities", label: "Entities", icon: User },
+    { id: "classification", label: "Classification", icon: SearchCode },
     { id: "keywords", label: "Keywords", icon: Key },
     { id: "readability", label: "Readability", icon: BookOpen },
-    { id: "advanced", label: "Advanced", icon: Zap },
+    { id: "style", label: "Style", icon: Pen },
+    { id: "summary", label: "Summary", icon: Text },
   ];
 
   const renderTabContent = () => {
@@ -84,13 +82,50 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
               <div className="metric-card">
                 <div className="metric-header">
                   <TrendingUp size={20} />
-                  <span>Overall Sentiment</span>
+                  <span>Characters</span>
                 </div>
-                <div className="metric-value">{analysis.sentiment.label}</div>
+                <div className="metric-value">
+                  {analysis.basicStats.charactersNoSpaces}
+                </div>
                 <div className="metric-detail">
-                  Confidence: {(analysis.sentiment.confidence * 100).toFixed(1)}
-                  %
+                  With spaces: {analysis.basicStats.characters}
                 </div>
+              </div>
+
+              <div className="metric-card">
+                <div className="metric-header">
+                  <TrendingUp size={20} />
+                  <span>Paragraphs</span>
+                </div>
+                <div className="metric-value">
+                  {analysis.basicStats.paragraphs}
+                </div>
+                <div className="metric-detail">
+                  Average Sentences per Paragraph:{" "}
+                  {analysis.basicStats.avgSentencesPerParagraph}
+                </div>
+              </div>
+
+              <div className="metric-card">
+                <div className="metric-header">
+                  <TrendingUp size={20} />
+                  <span>Sentences</span>
+                </div>
+                <div className="metric-value">
+                  {analysis.basicStats.sentences}
+                </div>
+                <div className="metric-detail">
+                  Average Words per Sentence:{" "}
+                  {analysis.basicStats.avgWordsPerSentence}
+                </div>
+              </div>
+
+              <div className="metric-card">
+                <div className="metric-header">
+                  <TrendingUp size={20} />
+                  <span>Words</span>
+                </div>
+                <div className="metric-value">{analysis.basicStats.words}</div>
               </div>
 
               <div className="metric-card">
@@ -108,17 +143,6 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <BookOpen size={20} />
-                  <span>Reading Level</span>
-                </div>
-                <div className="metric-value">{analysis.readability.level}</div>
-                <div className="metric-detail">
-                  Grade {analysis.readability.grade}
-                </div>
-              </div>
-
-              <div className="metric-card">
-                <div className="metric-header">
                   <Globe size={20} />
                   <span>Language</span>
                 </div>
@@ -126,36 +150,6 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                 <div className="metric-detail">
                   Confidence: {(analysis.language.confidence * 100).toFixed(1)}%
                 </div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-header">
-                  <TextQuote size={20} />
-                  <span>Text Category</span>
-                </div>
-                <div className="metric-value">
-                  {analysis.classification.category}
-                </div>
-                <div className="metric-detail">
-                  Confidence: {(analysis.language.confidence * 100).toFixed(1)}%
-                </div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-header">
-                  <GraduationCap size={20} />
-                  <span>Grammar Score</span>
-                </div>
-                <div className="metric-value">{analysis.grammar.score}</div>
-                <div className="metric-detail">
-                  Issues: {analysis.grammar.issues}
-                </div>
-              </div>
-            </div>
-
-            <div className="quick-insights">
-            <GraduationCap size={16} />
-              <span>Summary</span>
-              <div className="insights-list">
-                <div className="metric-detail">{analysis.summary}</div>
               </div>
             </div>
           </div>
@@ -166,25 +160,30 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
           <div className="tab-content">
             <SentimentChart data={analysis.sentiment} />
             <div className="sentiment-details">
-              <h3>Sentiment Breakdown</h3>
-              <div className="sentiment-scores">
-                {["positive", "neutral", "negative"].map((type) => (
-                  <div key={type} className={`score-item ${type}`}>
-                    <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
-                    <div className="score-bar">
-                      <div
-                        className={`score-fill ${type}`}
-                        style={{
-                          width: `${analysis.sentiment.scores[type] * 100}%`,
-                        }}
-                      ></div>
+              <h3
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                Tone
+                <span className="tooltip-wrapper">
+                  <HelpCircle size={18} color="blue" className="help-icon" />
+                  <span className="tooltip-text">
+                    Tone reflects the emotional quality or attitude expressed in
+                    the text.
+                  </span>
+                </span>
+              </h3>
+              {analysis.tone.map((entry) => {
+                return (
+                  <div className="metrics-grid">
+                    <div className="metric-card">
+                      <div className="metric-value">{entry.tone}</div>
+                      <div className="metric-detail">
+                        Strength: {entry.strength}
+                      </div>
                     </div>
-                    <span>
-                      {(analysis.sentiment.scores[type] * 100).toFixed(1)}%
-                    </span>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         );
@@ -193,26 +192,6 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
         return (
           <div className="tab-content">
             <EmotionChart data={analysis.emotions} />
-            <div className="emotions-list">
-              <h3>Detected Emotions</h3>
-              {analysis.emotions.map((emotion, index) => (
-                <div key={index} className="emotion-item">
-                  <span className="emotion-name">{emotion.emotion}</span>
-                  <div className="emotion-bar">
-                    <div
-                      className="emotion-fill"
-                      style={{
-                        width: `${emotion.confidence * 100}%`,
-                        backgroundColor: getEmotionColor(emotion.emotion),
-                      }}
-                    ></div>
-                  </div>
-                  <span className="emotion-score">
-                    {(emotion.confidence * 100).toFixed(1)}%
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
         );
 
@@ -220,7 +199,19 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
         return (
           <div className="tab-content">
             <div className="entities-section">
-              <h3>Named Entities</h3>
+              <h3
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                Named Entities
+                <span className="tooltip-wrapper">
+                  <HelpCircle size={18} color="blue" className="help-icon" />
+                  <span className="tooltip-text">
+                    Named Entities are specific people, organizations, places,
+                    or things mentioned in the text.
+                  </span>
+                </span>
+              </h3>
+
               <div className="entities-grid">
                 {Object.entries(analysis.entities).map(
                   ([type, entities]) =>
@@ -246,19 +237,32 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
         return (
           <div className="tab-content">
             <div className="keywords-section">
-              <h3>Key Terms & Phrases</h3>
+              <h3
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                Key Terms & Phrases
+                <span className="tooltip-wrapper">
+                  <HelpCircle size={18} color="blue" className="help-icon" />
+                  <span className="tooltip-text">
+                    Important words or phrases that summarize the key topics or
+                    themes in the text. Good keyword usage improves SEO,
+                    clarity, and relevance.
+                  </span>
+                </span>
+              </h3>
               <div className="keywords-list">
-                {analysis.keywords.map((keyword, index) => (
-                  <div key={index} className="keyword-item">
-                    <span className="keyword-text">{keyword.word}</span>
-                    <div className="keyword-stats">
-                      <span className="keyword-freq">×{keyword.frequency}</span>
-                      <span className="keyword-weight">
-                        {keyword.weight.toFixed(2)}
-                      </span>
+                {analysis.keywords
+                  .sort((a, b) => b.frequency - a.frequency)
+                  .map((keyword, index) => (
+                    <div key={index} className="keyword-item">
+                      <span className="keyword-text">{keyword.word}</span>
+                      <div className="keyword-stats">
+                        <span className="keyword-freq">
+                          ×{keyword.frequency}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -267,52 +271,224 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
       case "readability":
         return (
           <div className="tab-content">
-            <ReadabilityChart data={analysis.readability} />
-            <div className="readability-metrics">
-              <div className="metric-row">
-                <span>Flesch Reading Ease:</span>
-                <span className="metric-value">
+            <div className="metrics-grid">
+              <div className="metric-card">
+                <div className="metric-header">
+                  <TrendingUp size={20} />
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
+                  >
+                    Flesch Reading Ease
+                    <span className="tooltip-wrapper">
+                      <HelpCircle
+                        size={18}
+                        color="blue"
+                        className="help-icon"
+                      />
+                      <span className="tooltip-text">
+                        A readability score <b>(0–100)</b> based on sentence
+                        length and syllable count.
+                        <br />
+                        <br />
+                        <b>Ideal Scores:</b>
+                        <li>
+                          60–70 (easily understood by 13 - to 15-year-olds)
+                        </li>
+                        <li>80–100 (very easy to read)</li>
+                        <li>
+                          30–50 (difficult but okay for academic or technical
+                          writing)
+                        </li>
+                        <li>Below 30 (very hard to read)</li>
+                      </span>
+                    </span>
+                  </span>
+                </div>
+                <div className="metric-value">
                   {analysis.readability.fleschScore.toFixed(1)}
-                </span>
+                </div>
               </div>
-              <div className="metric-row">
-                <span>Average Sentence Length:</span>
-                <span className="metric-value">
+
+              <div className="metric-card">
+                <div className="metric-header">
+                  <TrendingUp size={20} />
+                  <span>Difficulty</span>
+                </div>
+                <div className="metric-value">{analysis.readability.level}</div>
+                <div className="metric-detail">
+                  Grade: {analysis.readability.grade}
+                </div>
+              </div>
+
+              <div className="metric-card">
+                <div className="metric-header">
+                  <TrendingUp size={20} />
+                  <span>Average Sentence Length</span>
+                </div>
+                <div className="metric-value">
                   {analysis.readability.avgSentenceLength.toFixed(1)} words
-                </span>
+                </div>
               </div>
-              <div className="metric-row">
-                <span>Complex Words:</span>
-                <span className="metric-value">
-                  {analysis.readability.complexWords}%
-                </span>
+
+              <div className="metric-card">
+                <div className="metric-header">
+                  <TrendingUp size={20} />
+                  <span>Complex Words</span>
+                </div>
+                <div className="metric-value">
+                  {analysis.readability.complexWords} words
+                </div>
               </div>
             </div>
           </div>
         );
 
-      case "advanced":
+      case "style":
+        return (
+          <div className="tab-content">
+            <div className="advanced-metrics">
+              <div className="metric-section">
+                <h3>Writing Style</h3>
+                <div className="coherence-score">
+                  <span className="score">{analysis.writingStyle.style}</span>
+                </div>
+                <p className="coherence-description">
+                  Text Complexity: <strong>{analysis.complexity.level}</strong>
+                </p>
+              </div>
+
+              <div className="metric-section">
+                <h3>Complexity Factors</h3>
+                {Object.entries(analysis.complexity.factors).map(
+                  ([factor, score]) => (
+                    <div key={factor} className="emotion-item">
+                      <div className="emotion-header">
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                          }}
+                        >
+                          <span className="emotion-name">
+                            {factor.charAt(0).toUpperCase() + factor.slice(1)}
+                          </span>
+                          <span className="tooltip-wrapper">
+                            <HelpCircle
+                              size={18}
+                              color="blue"
+                              className="help-icon"
+                            />
+                            <span className="tooltip-text">
+                              {getSemanticDescription(factor)}
+                            </span>
+                          </span>
+                        </span>
+                        <span className="emotion-percentage">{score}%</span>
+                      </div>
+                      <div className="emotion-bar">
+                        <div
+                          className="emotion-fill"
+                          style={{
+                            width: `${score}%`,
+                            backgroundColor: getfactorsColor(factor),
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+
+              <div className="metric-section">
+                <h3>Sentence Variety</h3>
+                {Object.entries(analysis.writingStyle.sentenceVariety).map(
+                  ([factor, score]) => (
+                    <div key={factor} className="emotion-item">
+                      <div className="emotion-header">
+                        <span className="emotion-name">
+                          {factor.charAt(0).toUpperCase() + factor.slice(1)}
+                        </span>
+                        <span className="emotion-percentage">{score}</span>
+                      </div>
+                      <div className="emotion-bar">
+                        <div
+                          className="emotion-fill"
+                          style={{
+                            width: `${score}%`,
+                            backgroundColor: "blue",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        );
+
+      case "classification":
         return (
           <div className="tab-content">
             <div className="advanced-metrics">
               <div className="metric-section">
                 <h3>Text Classification</h3>
-                <div className="classification-result">
-                  <span className="category">
-                    {analysis.classification.category}
-                  </span>
-                  <span className="confidence">
-                    {(analysis.classification.confidence * 100).toFixed(1)}%
-                    confidence
-                  </span>
+                <div className="entities-section">
+                  <div className="entities-grid">
+                    <div className="entity-group">
+                      <h4>Primary</h4>
+                      <div className="entity-tags">
+                        <span className="entity-tag">
+                          {analysis.classification.category}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="entity-group">
+                      <h4>Secondary</h4>
+                      {Object.entries(analysis.classification.scores).map(
+                        ([label]) => (
+                          <div className="entity-tags">
+                            <span className="entity-tag">{label}</span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="metric-section">
-                <h3>Coherence Analysis</h3>
+                <h3
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  Coherence Analysis
+                  <span className="tooltip-wrapper">
+                    <HelpCircle size={18} color="blue" className="help-icon" />
+                    <span className="tooltip-text">
+                      Coherence measures how logically connected and
+                      easy-to-follow the text is. It looks at how well sentences
+                      flow together and if the message builds smoothly.
+                      <br />
+                      <br />
+                      <strong>70 – 100</strong> is considered good. <br />
+                      Below <strong>50</strong> suggests poor transitions or
+                      disconnected ideas.
+                    </span>
+                  </span>
+                </h3>
                 <div className="coherence-score">
                   <span className="score">
-                    {analysis.coherence.score.toFixed(2)}
+                    {analysis.coherence.score * 100}
                   </span>
                   <span className="label">Coherence Score</span>
                 </div>
@@ -324,8 +500,16 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
               <div className="metric-section">
                 <h3>Grammar Analysis</h3>
                 <div className="grammar-results">
-                  <div className="grammar-score">
-                    Score: {analysis.grammar.score}%
+                  <div className="coherence-score">
+                    <span
+                      className="score"
+                      style={{
+                        color: "green",
+                      }}
+                    >
+                      {analysis.grammar.score}
+                    </span>
+                    <span className="label">Grammar Score</span>
                   </div>
                   {analysis.grammar.issues.length > 0 && (
                     <div className="grammar-issues">
@@ -339,6 +523,16 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+        );
+
+      case "summary":
+        return (
+          <div className="tab-content">
+            <div className="keywords-section">
+              <h3>Summary</h3>
+              <div className="metric-detail">{analysis.summary}</div>
             </div>
           </div>
         );
@@ -370,16 +564,58 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
   );
 };
 
-const getEmotionColor = (emotion) => {
+const getfactorsColor = (factor) => {
   const colors = {
-    joy: "#10b981",
-    sadness: "#3b82f6",
-    anger: "#ef4444",
-    fear: "#8b5cf6",
-    surprise: "#f59e0b",
-    disgust: "#84cc16",
+    lexical: "#10b981",
+    semantic: "#3b82f6",
+    syntactic: "#ef4444",
   };
-  return colors[emotion] || "#6b7280";
+  return colors[factor] || "#6b7280";
+};
+
+const getSemanticDescription = (factor) => {
+  const descriptions = {
+    lexical: (
+      <>
+        Refers to the vocabulary difficulty — how rare, sophisticated, or varied
+        the words are.
+        <br />
+        <br />
+        <ul style={{ paddingLeft: "1.2rem" }}>
+          <li>20 – 50: balanced vocabulary</li>
+          <li>&gt; 60: advanced or technical (may hurt readability)</li>
+          <li>&lt; 20: too basic or repetitive</li>
+        </ul>
+      </>
+    ),
+    semantic: (
+      <>
+        Measures how conceptually dense or abstract the ideas are.
+        <br />
+        <br />
+        <ul style={{ paddingLeft: "1.2rem" }}>
+          <li>30 – 60: good for general communication</li>
+          <li>&gt; 60: more nuanced/abstract (okay for experts)</li>
+          <li>&lt; 30: simple and direct</li>
+        </ul>
+      </>
+    ),
+    syntactic: (
+      <>
+        Refers to the complexity of sentence structures — use of clauses,
+        conjunctions, and length.
+        <br />
+        <br />
+        <ul style={{ paddingLeft: "1.2rem" }}>
+          <li>30 – 60: clear and rich sentence construction</li>
+          <li>&gt; 70: may become hard to follow</li>
+          <li>&lt; 30: may sound choppy or oversimplified</li>
+        </ul>
+      </>
+    ),
+  };
+
+  return descriptions[factor] || null;
 };
 
 export default AnalysisPanel;

@@ -1,7 +1,8 @@
-import React from 'react';
-import '../styles/TextEditor.css';
+import React from "react";
+import "../styles/TextEditor.css";
+import { Brain, Stamp, Download, MagnetIcon, BrainCircuit } from "lucide-react";
 
-const TextEditor = ({ text, setText, isDarkMode }) => {
+const TextEditor = ({ text, setText, startAnalyzing, isDarkMode }) => {
   const handleChange = (e) => {
     setText(e.target.value);
   };
@@ -24,27 +25,18 @@ Try pasting a news article, blog post, or any text to see the power of AI-driven
         value={text}
         onChange={handleChange}
         placeholder={placeholder}
-        className={`editor-textarea ${isDarkMode ? 'dark' : ''}`}
+        className={`editor-textarea ${isDarkMode ? "dark" : ""}`}
         spellCheck="false"
       />
-      
+
       <div className="editor-stats">
-        <div className="stat">
-          <span className="stat-label">Characters:</span>
-          <span className="stat-value">{text.length}</span>
-        </div>
-        <div className="stat">
-          <span className="stat-label">Words:</span>
-          <span className="stat-value">
-            {text.split(/\s+/).filter(word => word.length > 0).length}
-          </span>
-        </div>
-        <div className="stat">
-          <span className="stat-label">Paragraphs:</span>
-          <span className="stat-value">
-            {text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length}
-          </span>
-        </div>
+        <button
+          className="btn-icon"
+          onClick={startAnalyzing}
+        >
+          <BrainCircuit size={20} />
+          <span>Analyze</span>
+        </button>
       </div>
     </div>
   );
