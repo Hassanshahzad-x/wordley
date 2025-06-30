@@ -36,11 +36,9 @@ def analyze_writing_style(text):
     )
 
     return {
-        "writingStyle": {
             "style": style,
             "vocabularyDiversity": vocab_diversity,
             "avgWordsPerSentence": avg_words_per_sentence,
             "sentenceVariety": sentence_variety,
             "wordComplexity": {"simple": simple_pct, "complex": complex_pct},
-        }
     }

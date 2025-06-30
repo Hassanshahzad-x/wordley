@@ -74,9 +74,7 @@ def classify_text(text):
     gc.collect()
 
     return {
-        "classification": {
             "category": main_category.capitalize(),
             "confidence": confidence,
             "scores": scores,
-        }
     }

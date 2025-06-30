@@ -51,4 +51,4 @@ def analyze_tone(text):
         "strength": "Strong" if analytical_score == 2 else "Weak"
     })
 
-    return {"tone": tone}
+    return tone

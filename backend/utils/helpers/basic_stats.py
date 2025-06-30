@@ -17,7 +17,6 @@ def analyze_basic_stats(text):
         ),
         "avgSentencesPerParagraph": round(
             len([s for s in sentences if s.strip()])
-            / max(1, len([p for p in paragraphs if p.strip()])),
-            2,
+            / max(1, len([p for p in paragraphs if p.strip()]))
         ),
     }

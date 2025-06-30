@@ -19,4 +19,4 @@ def analyze_emotions(text):
     del model_for_emotions
     gc.collect()
 
-    return {"emotions": emotions}
+    return emotions

@@ -55,4 +55,4 @@ def detect_bias(text):
     del model_for_classification
     gc.collect()
 
-    return {"bias": flagged_biases}
+    return flagged_biases

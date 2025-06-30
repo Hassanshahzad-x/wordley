@@ -17,19 +17,17 @@ def analyze_coherence(text):
     avg_score = float(np.mean(adjacent_similarities))
     transitions = sum(1 for score in adjacent_similarities if score < 0.5)
 
-    if avg_score > 0.66:
+    if avg_score > 0.70:
         description = "Highly coherent and well-structured"
-    elif avg_score > 0.33:
+    elif avg_score > 0.5:
         description = "Moderate coherence with acceptable flow"
     else:
         description = "Low coherence, needs better structure and transitions"
 
     return {
-        "coherence": {
             "score": round(avg_score, 2),
             "transitionCount": transitions,
             "description": description,
-        }
     }
 
 

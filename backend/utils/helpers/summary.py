@@ -51,4 +51,4 @@ def generate_summary(text):
     del model_for_summarizer
     gc.collect()
 
-    return {"summary": final_summary or raw_summary}
+    return final_summary or raw_summary
