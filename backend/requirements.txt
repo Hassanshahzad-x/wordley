@@ -1,0 +1,9 @@
+torch==2.7.1
+transformers==4.53.0
+nltk==3.9.1
+spacy==3.8.7
+flask==3.1.1
+flask-cors==6.0.1
+langdetect==1.0.9
+textstat==0.7.7
+language_tool_python==2.9.4
