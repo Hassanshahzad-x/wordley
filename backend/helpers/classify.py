@@ -3,7 +3,7 @@ def classify_text(text):
     import gc
 
     model_for_classification = pipeline(
-        "zero-shot-classification", model="facebook/bart-large-mnli", cache_dir="/tmp"
+        "zero-shot-classification", model="facebook/bart-large-mnli"
     )
 
     candidate_labels = [

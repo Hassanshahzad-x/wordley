@@ -5,8 +5,7 @@ def analyze_emotions(text):
     model_for_emotions = pipeline(
         "text-classification",
         model="j-hartmann/emotion-english-distilroberta-base",
-        top_k=None,
-        cache_dir="/tmp",
+        top_k=None
     )
 
     results = model_for_emotions(text)

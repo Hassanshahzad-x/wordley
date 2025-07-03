@@ -15,7 +15,7 @@ def generate_summary(text):
     import gc
 
     model_for_summarizer = pipeline(
-        "summarization", model="facebook/bart-large-cnn", cache_dir="/tmp"
+        "summarization", model="facebook/bart-large-cnn"
     )
 
     tokenizer_for_summarizer = model_for_summarizer.tokenizer
