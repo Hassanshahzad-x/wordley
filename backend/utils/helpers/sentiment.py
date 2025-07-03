@@ -1,28 +1,24 @@
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
-
 def analyze_sentiment(text):
-    analyzer = SentimentIntensityAnalyzer()
-    vs = analyzer.polarity_scores(text)
+    from transformers import pipeline
+    import gc
 
-    compound_score = vs["compound"]
-    neg_score = vs["neg"]
-    neu_score = vs["neu"]
-    pos_score = vs["pos"]
+    sentiment_pipeline = pipeline(
+        "text-classification",
+        model="cardiffnlp/twitter-roberta-base-sentiment-latest",
+        top_k=None,
+    )
 
-    confidence = compound_score
+    results = sentiment_pipeline(text)[0]
+    scores = {res["label"].lower(): round(res["score"], 2) for res in results}
+    best = max(results, key=lambda x: x["score"])
 
-    scores = {
-        "positive": round(pos_score, 2),
-        "neutral": round(neu_score, 2),
-        "negative": round(neg_score, 2),
+    sentiment = {
+        "confidence": round(best["score"], 2),
+        "label": best["label"].capitalize(),
+        "scores": scores,
     }
 
-    if compound_score >= 0.5:
-        label = "Positive"
-    elif compound_score <= -0.5:
-        label = "Negative"
-    else:
-        label = "Neutral"
+    del sentiment_pipeline
+    gc.collect()
 
-    return {"label": label, "confidence": round(confidence, 2), "scores": scores}
+    return sentiment

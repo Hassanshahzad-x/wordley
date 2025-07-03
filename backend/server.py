@@ -1,3 +1,5 @@
+import traceback
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -16,6 +18,7 @@ from utils.helpers.tone import analyze_tone
 from utils.helpers.writing_style import analyze_writing_style
 from utils.helpers.readability import analyze_readability
 from utils.helpers.language import detect_language
+from utils.helpers.pos import analyze_pos
 
 app = Flask(__name__)
 CORS(app)
@@ -23,32 +26,41 @@ CORS(app)
 
 @app.route("/analyze", methods=["POST"])
 def analyze_text():
-    data = request.get_json()
-    text = data.get("text", "")
+    try:
+        data = request.get_json()
+        text = data.get("text", "")
 
-    if not text.strip():
-        return jsonify({"error": "Text is empty"}), 400
+        if not text.strip():
+            return jsonify({"error": "Text is empty"}), 400
 
-    result = {
-        "basicStats": analyze_basic_stats(text),
-        "sentiment": analyze_sentiment(text),
-        "emotions": analyze_emotions(text),
-        "entities": analyze_ner(text),
-        "keywords": extract_keywords(text),
-        "readability": analyze_readability(text),
-        "language": detect_language(text),
-        "classification": classify_text(text),
-        "coherence": analyze_coherence(text),
-        "grammar": grammar_analysis(text),
-        "summary": generate_summary(text),
-        "bias": detect_bias(text),
-        "tone": analyze_tone(text),
-        "writingStyle": analyze_writing_style(text),
-        "complexity": analyze_complexity(text),
-        "readingTime": round(len(text.split()) / 200),
-    }
+        result = {
+            "basicStats": analyze_basic_stats(text),
+            "sentiment": analyze_sentiment(text),
+            "emotions": analyze_emotions(text),
+            "entities": analyze_ner(text),
+            "pos": analyze_pos(text),
+            "keywords": extract_keywords(text),
+            "readability": analyze_readability(text),
+            "language": detect_language(text),
+            "classification": classify_text(text),
+            "coherence": analyze_coherence(text),
+            "grammar": grammar_analysis(text),
+            "summary": generate_summary(text),
+            "bias": detect_bias(text),
+            "tone": analyze_tone(text),
+            "writingStyle": analyze_writing_style(text),
+            "complexity": analyze_complexity(text),
+            "readingTime": round(len(text.split()) / 200),
+        }
 
-    return jsonify(result)
+        return jsonify(result)
+    except Exception as e:
+        traceback.print_exc()
+
+        return jsonify({
+            "error": "An error occurred while processing the text.",
+            "details": str(e)
+        }), 500
 
 
 @app.route("/test", methods=["GET"])
@@ -56,4 +68,5 @@ def demo():
     return jsonify({"hehe": "haha"})
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5000)

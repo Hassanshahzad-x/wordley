@@ -3,7 +3,7 @@ def detect_bias(text):
     import gc
 
     model_for_classification = pipeline(
-        "zero-shot-classification", model="valhalla/distilbart-mnli-12-3"
+        "zero-shot-classification", model="facebook/bart-large-mnli"
     )
 
     bias_labels = [

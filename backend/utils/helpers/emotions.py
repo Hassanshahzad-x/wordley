@@ -4,16 +4,20 @@ def analyze_emotions(text):
 
     model_for_emotions = pipeline(
         "text-classification",
-        model="bhadresh-savani/distilbert-base-uncased-emotion",
+        model="j-hartmann/emotion-english-distilroberta-base",
         top_k=None,
     )
 
     results = model_for_emotions(text)
 
+    if isinstance(results[0], list):
+        flat_results = [res for sublist in results for res in sublist]
+    else:
+        flat_results = results
+
     emotions = [
         {"emotion": res["label"].lower(), "confidence": round(res["score"], 2)}
-        for result_list in results
-        for res in result_list
+        for res in flat_results
     ]
 
     del model_for_emotions

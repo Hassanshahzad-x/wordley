@@ -3,7 +3,7 @@ def classify_text(text):
     import gc
 
     model_for_classification = pipeline(
-        "zero-shot-classification", model="valhalla/distilbart-mnli-12-3"
+        "zero-shot-classification", model="facebook/bart-large-mnli"
     )
 
     candidate_labels = [
@@ -74,7 +74,7 @@ def classify_text(text):
     gc.collect()
 
     return {
-            "category": main_category.capitalize(),
-            "confidence": confidence,
-            "scores": scores,
+        "category": main_category.capitalize(),
+        "confidence": confidence,
+        "scores": scores,
     }
