@@ -13,6 +13,21 @@ import {
   Text,
   SearchCode,
   HelpCircle,
+  Cable,
+  Orbit,
+  Scan,
+  WholeWord,
+  Languages,
+  LucideWholeWord,
+  Link2Icon,
+  Repeat,
+  DiffIcon,
+  FileDiff,
+  LucideNavigation,
+  Component,
+  TextCursor,
+  BookMarked,
+  Speech,
 } from "lucide-react";
 import SentimentChart from "./charts/SentimentChart";
 import EmotionChart from "./charts/EmotionChart";
@@ -25,7 +40,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
     return (
       <div className="analysis-loading">
         <div className="loading-spinner"></div>
-        <p>Analyzing text with AI...</p>
+        <p>Analyzing your text with AI, this might take few minutes...</p>
       </div>
     );
   }
@@ -66,10 +81,10 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
     { id: "sentiment", label: "Sentiment", icon: TrendingUp },
     { id: "emotions", label: "Emotions", icon: Heart },
     { id: "entities", label: "Entities", icon: User },
+    { id: "pos", label: "Parts of Speech", icon: Speech },
     { id: "classification", label: "Classification", icon: SearchCode },
     { id: "keywords", label: "Keywords", icon: Key },
-    { id: "readability", label: "Readability", icon: BookOpen },
-    { id: "style", label: "Style", icon: Pen },
+    { id: "readability", label: "Style & Readability", icon: BookOpen },
     { id: "summary", label: "Summary", icon: Text },
   ];
 
@@ -94,7 +109,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <TrendingUp size={20} />
+                  <Cable size={20} />
                   <span>Paragraphs</span>
                 </div>
                 <div className="metric-value">
@@ -108,7 +123,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <TrendingUp size={20} />
+                  <Link2Icon size={20} />
                   <span>Sentences</span>
                 </div>
                 <div className="metric-value">
@@ -122,7 +137,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <TrendingUp size={20} />
+                  <WholeWord size={20} />
                   <span>Words</span>
                 </div>
                 <div className="metric-value">{analysis.basicStats.words}</div>
@@ -143,7 +158,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <Globe size={20} />
+                  <Languages size={20} />
                   <span>Language</span>
                 </div>
                 <div className="metric-value">{analysis.language.name}</div>
@@ -164,26 +179,19 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                 style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
               >
                 Tone
-                <span className="tooltip-wrapper">
-                  <HelpCircle size={18} color="blue" className="help-icon" />
-                  <span className="tooltip-text">
-                    Tone reflects the emotional quality or attitude expressed in
-                    the text.
-                  </span>
-                </span>
               </h3>
-              {analysis.tone.map((entry) => {
-                return (
-                  <div className="metrics-grid">
+              <div className="metrics-grid">
+                {analysis.tone.map((entry) => {
+                  return (
                     <div className="metric-card">
                       <div className="metric-value">{entry.tone}</div>
                       <div className="metric-detail">
                         Strength: {entry.strength}
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         );
@@ -222,6 +230,48 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                           {entities.map((entity, index) => (
                             <span key={index} className="entity-tag">
                               {entity}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
+          </div>
+        );
+
+      case "pos":
+        return (
+          <div className="tab-content">
+            <div className="entities-section">
+              <h3
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                Parts of Speech
+                <span className="tooltip-wrapper">
+                  <HelpCircle size={18} color="blue" className="help-icon" />
+                  <span className="tooltip-text">
+                    Parts of Speech (POS) highlight the grammatical roles of
+                    words like nouns, verbs, adjectives, etc., as detected in
+                    the text.
+                  </span>
+                </span>
+              </h3>
+
+              <div className="entities-grid">
+                {Object.entries(analysis.pos).map(
+                  ([pos, words]) =>
+                    words.length > 0 && (
+                      <div key={pos} className="entity-group">
+                        <h4>{POS_FULL_FORMS[pos] || pos}</h4>
+                        <div className="entity-tags">
+                          {words.map((word, idx) => (
+                            <span
+                              key={idx}
+                              className={`entity-tag ${posColors[pos] || ""}`}
+                            >
+                              {word}
                             </span>
                           ))}
                         </div>
@@ -274,7 +324,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
             <div className="metrics-grid">
               <div className="metric-card">
                 <div className="metric-header">
-                  <TrendingUp size={20} />
+                  <Repeat size={20} />
                   <span
                     style={{
                       display: "flex",
@@ -315,7 +365,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <TrendingUp size={20} />
+                  <FileDiff size={20} />
                   <span>Difficulty</span>
                 </div>
                 <div className="metric-value">{analysis.readability.level}</div>
@@ -326,17 +376,20 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <TrendingUp size={20} />
+                  <LucideNavigation size={20} />
                   <span>Average Sentence Length</span>
                 </div>
                 <div className="metric-value">
                   {analysis.readability.avgSentenceLength.toFixed(1)} words
                 </div>
+                <div className="metric-detail">
+                  Syllable count: {analysis.readability.syllableCount}
+                </div>
               </div>
 
               <div className="metric-card">
                 <div className="metric-header">
-                  <TrendingUp size={20} />
+                  <Component size={20} />
                   <span>Complex Words</span>
                 </div>
                 <div className="metric-value">
@@ -344,12 +397,6 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                 </div>
               </div>
             </div>
-          </div>
-        );
-
-      case "style":
-        return (
-          <div className="tab-content">
             <div className="advanced-metrics">
               <div className="metric-section">
                 <h3>Writing Style</h3>
@@ -451,13 +498,19 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
 
                     <div className="entity-group">
                       <h4>Secondary</h4>
-                      {Object.entries(analysis.classification.scores).map(
-                        ([label]) => (
-                          <div className="entity-tags">
-                            <span className="entity-tag">{label}</span>
-                          </div>
-                        )
-                      )}
+                      <div className="entity-tags">
+                        {Object.entries(analysis.classification.scores)
+                          .filter(
+                            ([label]) =>
+                              label.toLowerCase() !==
+                              analysis.classification.category.toLowerCase()
+                          )
+                          .map(([label]) => (
+                            <span className="entity-tag">
+                              {label.charAt(0).toUpperCase() + label.slice(1)}
+                            </span>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -488,7 +541,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                 </h3>
                 <div className="coherence-score">
                   <span className="score">
-                    {analysis.coherence.score * 100}
+                    {(analysis.coherence.score * 100).toFixed(0)}
                   </span>
                   <span className="label">Coherence Score</span>
                 </div>
@@ -530,8 +583,11 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
       case "summary":
         return (
           <div className="tab-content">
-            <div className="keywords-section">
-              <h3>Summary</h3>
+            <div className="metric-card">
+              <div className="metric-header">
+                <BookMarked size={20} />
+                <span>Summary</span>
+              </div>
               <div className="metric-detail">{analysis.summary}</div>
             </div>
           </div>
@@ -616,6 +672,47 @@ const getSemanticDescription = (factor) => {
   };
 
   return descriptions[factor] || null;
+};
+
+const POS_FULL_FORMS = {
+  ADJ: "Adjective",
+  ADP: "Adposition",
+  ADV: "Adverb",
+  AUX: "Auxiliary Verb",
+  CCONJ: "Coordinating Conjunction",
+  DET: "Determiner",
+  INTJ: "Interjection",
+  NOUN: "Noun",
+  NUM: "Numeral",
+  PART: "Particle",
+  PRON: "Pronoun",
+  PROPN: "Proper Noun",
+  PUNCT: "Punctuation",
+  SCONJ: "Subordinating Conjunction",
+  SPACE: "Space",
+  VERB: "Verb",
+  X: "Other",
+  SYM: "SYMBOL"
+};
+
+const posColors = {
+  NOUN: "tag-noun",
+  VERB: "tag-verb",
+  ADJ: "tag-adj",
+  ADV: "tag-adv",
+  PRON: "tag-pron",
+  PROPN: "tag-propn",
+  ADP: "tag-adp",
+  CCONJ: "tag-cconj",
+  SCONJ: "tag-sconj",
+  AUX: "tag-aux",
+  PART: "tag-part",
+  NUM: "tag-num",
+  DET: "tag-det",
+  PUNCT: "tag-punct",
+  SPACE: "tag-space",
+  INTJ: "tag-intj",
+  X: "tag-x",
 };
 
 export default AnalysisPanel;

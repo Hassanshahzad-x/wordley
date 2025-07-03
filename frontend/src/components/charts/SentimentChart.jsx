@@ -58,7 +58,10 @@ const SentimentChart = ({ data }) => {
               {(data.confidence * 100).toFixed(1)}% confidence
             </span>
           </div>
-          <div className="metric-detail">Overall sentiment not necessarily has to be the sentiment with the highest percentage.</div>
+          <div className="metric-detail">
+            Overall sentiment does not necessarily have to be the sentiment with
+            the highest percentage.
+          </div>
         </div>
       </div>
     </div>

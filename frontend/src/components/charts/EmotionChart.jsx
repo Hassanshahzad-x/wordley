@@ -7,15 +7,12 @@ const EmotionChart = ({ data }) => {
   const getEmotionColor = (emotion) => {
     const colors = {
       joy: "#10b981",
-      happiness: "#10b981",
+      neutral: "#8b5cf6",
       sadness: "#3b82f6",
+      disgust: "#006400",
+      fear: "#f59e0b",
+      surprise: "#FF69B4",
       anger: "#ef4444",
-      fear: "#8b5cf6",
-      surprise: "#f59e0b",
-      disgust: "#84cc16",
-      anticipation: "#06b6d4",
-      trust: "#14b8a6",
-      default: "#6b7280",
     };
     return colors[emotion.toLowerCase()] || colors.default;
   };
@@ -24,10 +21,11 @@ const EmotionChart = ({ data }) => {
     const icons = {
       joy: "😊",
       sadness: "😢",
-      anger: "😡",
+      disgust: "🤢",
       fear: "😨",
-      love: "😍",
+      neutral: "😐",
       surprise: "😲",
+      anger: "😡",
     };
     return icons[emotion.toLowerCase()] || "😐";
   };
