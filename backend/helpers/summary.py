@@ -14,7 +14,9 @@ def generate_summary(text):
     from transformers import pipeline
     import gc
 
-    model_for_summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+    model_for_summarizer = pipeline(
+        "summarization", model="facebook/bart-large-cnn", cache_dir="/tmp"
+    )
 
     tokenizer_for_summarizer = model_for_summarizer.tokenizer
 

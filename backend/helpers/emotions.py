@@ -6,6 +6,7 @@ def analyze_emotions(text):
         "text-classification",
         model="j-hartmann/emotion-english-distilroberta-base",
         top_k=None,
+        cache_dir="/tmp",
     )
 
     results = model_for_emotions(text)

@@ -1,8 +1,14 @@
 from collections import Counter
 import re
 import spacy
+import spacy.cli
 
-nlp = spacy.load("en_core_web_sm")
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    spacy.cli.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
+
 
 def extract_keywords(text):
     doc = nlp(text.lower())

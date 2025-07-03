@@ -6,6 +6,7 @@ def analyze_sentiment(text):
         "text-classification",
         model="cardiffnlp/twitter-roberta-base-sentiment-latest",
         top_k=None,
+        cache_dir="/tmp",
     )
 
     results = sentiment_pipeline(text)[0]

@@ -1,8 +1,14 @@
 import spacy
 from nltk.tokenize import sent_tokenize, word_tokenize
 from textstat import textstat
+import spacy.cli
 
-nlp = spacy.load("en_core_web_sm")
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    spacy.cli.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
+
 
 def count_passive_voice(sentences):
     passive_count = 0
