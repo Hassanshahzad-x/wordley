@@ -12,6 +12,8 @@ import TextEditor from "./components/TextEditor";
 import AnalysisPanel from "./components/AnalysisPanel";
 import "./styles/App.css";
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 function App() {
   const [text, setText] = useState("");
   const [analysis, setAnalysis] = useState(null);
@@ -26,7 +28,7 @@ function App() {
 
     setIsAnalyzing(true);
     const timer = setTimeout(() => {
-      fetch(`${window.origin}/analyze`, {
+      fetch(`${backendURL}/analyze`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,12 +37,9 @@ function App() {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Analysis Result:", data);
           setAnalysis(data);
         })
-        .catch((err) => {
-          console.error("API Error:", err);
-        })
+        .catch((err) => {})
         .finally(() => {
           setIsAnalyzing(false);
         });
