@@ -3,7 +3,7 @@ import "../styles/TextEditor.css";
 import { BrainCircuit } from "lucide-react";
 
 const TextEditor = ({ text, setText, startAnalyzing, isDarkMode }) => {
-  const MAX_WORDS = 1000;
+  const MAX_WORDS = 300;
 
   const countWords = (str) => str.trim().split(/\s+/).filter(Boolean).length;
 
@@ -32,7 +32,7 @@ const TextEditor = ({ text, setText, startAnalyzing, isDarkMode }) => {
   • Grammar and coherence evaluation
   • Summary and classification
 
-  Max 1000 words!`;
+  Max 300 words!`;
 
   return (
     <div className="text-editor">
