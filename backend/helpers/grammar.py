@@ -1,6 +1,6 @@
-import language_tool_python
+from language_tool_python import LanguageToolPublicAPI
 
-tool = language_tool_python.LanguageTool("en-US")
+tool = LanguageToolPublicAPI("en-US")
 
 
 def grammar_analysis(text):

@@ -1,10 +1,8 @@
-import language_tool_python
 import nltk
 from transformers import (
     AutoTokenizer,
     AutoModel,
     AutoModelForSequenceClassification,
-    pipeline,
     BartTokenizer,
     BartForConditionalGeneration,
 )
@@ -16,7 +14,6 @@ def preload_models():
     nltk.download("punkt")
     nltk.download("punkt_tab")
     nltk.download("stopwords")
-    language_tool_python.LanguageTool("en-US")
 
     try:
         nltk.data.find("sentiment/vader_lexicon.zip")
