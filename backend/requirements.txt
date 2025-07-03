@@ -8,3 +8,4 @@ langdetect==1.0.9
 textstat==0.7.7
 language_tool_python==2.9.4
 waitress==3.0.2
+gunicorn
