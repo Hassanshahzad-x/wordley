@@ -29,8 +29,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .analysis-loading p {
@@ -156,11 +160,11 @@
   flex: 1;
   overflow-y: auto;
   background: var(--bg-primary);
+  padding: 1rem;
 }
 
 .tab-content {
-  padding: 1.5rem;
-  height: 100%;
+  display: grid;
   gap: 1rem;
 }
 
@@ -169,14 +173,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-bottom: 2rem;
 }
 
 .metric-card {
-  background: var(--bg-secondary);
+  background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: 0.75rem;
-  padding: 1.25rem;
+  padding: 1rem;
   transition: all var(--transition-normal);
 }
 
@@ -413,15 +416,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-top: 0.5rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .entity-tag {
+  white-space: nowrap;
   background: var(--primary-color);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
   font-size: 0.75rem;
   font-weight: 500;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Keywords */
@@ -626,38 +635,67 @@
   color: var(--text-secondary);
 }
 
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 250px;
+  font-size: 0.8rem;
+  background-color: #2463eb;
+  color: white;
+  text-align: left;
+  border-radius: 6px;
+  padding: 0.5rem;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tooltip-wrapper:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .metrics-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
-  
+
   .tabs-header {
     flex-wrap: wrap;
   }
-  
+
   .tab-button {
     padding: 0.5rem 0.75rem;
     font-size: 0.75rem;
   }
-  
+
   .tab-content {
     padding: 1rem;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .entities-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .metric-card {
     padding: 1rem;
   }
-  
+
   .metric-value {
     font-size: 1.25rem;
   }
@@ -667,21 +705,21 @@
   .analysis-empty {
     padding: 1rem;
   }
-  
+
   .tab-content {
     padding: 0.75rem;
   }
-  
+
   .metric-section {
     padding: 1rem;
   }
-  
+
   .keyword-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .keyword-stats {
     align-self: stretch;
     justify-content: space-between;
@@ -693,11 +731,11 @@
   .metric-card {
     border-width: 2px;
   }
-  
+
   .tab-button.active {
     border-bottom-width: 3px;
   }
-  
+
   .score-bar,
   .emotion-bar {
     border: 1px solid currentColor;
@@ -709,14 +747,83 @@
   .tabs-header {
     display: none;
   }
-  
+
   .tab-content-container {
     overflow: visible;
   }
-  
+
   .metric-card,
   .metric-section {
     break-inside: avoid;
     border: 1px solid black;
   }
+}
+
+.tag-noun {
+  background: #e0f7fa;
+  color: #006064;
+}
+.tag-verb {
+  background: #f1f8e9;
+  color: #33691e;
+}
+.tag-adj {
+  background: #fff3e0;
+  color: #e65100;
+}
+.tag-adv {
+  background: #fce4ec;
+  color: #880e4f;
+}
+.tag-pron {
+  background: #ede7f6;
+  color: #4527a0;
+}
+.tag-propn {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+.tag-adp {
+  background: #f3e5f5;
+  color: #6a1b9a;
+}
+.tag-aux {
+  background: #fbe9e7;
+  color: #bf360c;
+}
+.tag-det {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+.tag-num {
+  background: #e8eaf6;
+  color: #283593;
+}
+.tag-verb {
+  background: #f9fbe7;
+  color: #827717;
+}
+.tag-sconj {
+  background: #fffde7;
+  color: #f9a825;
+}
+.tag-cconj {
+  background: #e0f2f1;
+  color: #004d40;
+}
+.tag-punct {
+  background: #eceff1;
+  color: #37474f;
+}
+.tag-part {
+  background: #dedcdc;
+  color: #625f5f;
+}
+.tag-intj {
+  background: #f1f8e9;
+  color: #33691e;
+}
+.tag-x {
+  background: #fbe9e7;
+  color: #3e2723;
 }

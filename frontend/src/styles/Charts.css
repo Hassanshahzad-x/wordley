@@ -71,15 +71,15 @@
 }
 
 .bar.positive {
-  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  background: green;
 }
 
 .bar.neutral {
-  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+  background: orange;
 }
 
 .bar.negative {
-  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  background: red
 }
 
 .bar-value {
@@ -109,15 +109,15 @@
 }
 
 .sentiment-label.positive {
-  color: var(--success-color);
+  color: green
 }
 
 .sentiment-label.neutral {
-  color: var(--text-muted);
+  color: orange
 }
 
 .sentiment-label.negative {
-  color: var(--error-color);
+  color: red
 }
 
 .confidence {
@@ -177,10 +177,9 @@
 }
 
 .emotion-percentage {
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  color: var(--text-primary);
 }
 
 .wheel-center {
@@ -613,10 +612,6 @@
 }
 
 /* Hover effects for interactive elements */
-.bar:hover {
-  filter: brightness(1.1);
-  transform: scaleY(1.05);
-}
 
 .emotion-bar-item:hover {
   background: var(--bg-secondary);

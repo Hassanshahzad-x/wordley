@@ -161,6 +161,12 @@ body {
   color: white;
 }
 
+.feedback-btn:hover:not(:disabled) {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+}
+
 .theme-toggle:hover {
   background: var(--accent-color);
   border-color: var(--accent-color);
