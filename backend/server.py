@@ -23,6 +23,9 @@ from helpers.pos import analyze_pos
 app = Flask(__name__)
 CORS(app)
 
+from models.models import preload_models
+
+preload_models()
 
 @app.route("/analyze", methods=["POST"])
 def analyze_text():
