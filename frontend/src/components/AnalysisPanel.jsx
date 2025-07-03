@@ -550,7 +550,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                 </p>
               </div>
 
-              <div className="metric-section">
+              {/* <div className="metric-section">
                 <h3>Grammar Analysis</h3>
                 <div className="grammar-results">
                   <div className="coherence-score">
@@ -575,7 +575,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         );

@@ -9,7 +9,6 @@ from helpers.classify import classify_text
 from helpers.coherence import analyze_coherence
 from helpers.complexity import analyze_complexity
 from helpers.emotions import analyze_emotions
-from helpers.grammar import grammar_analysis
 from helpers.keywords import extract_keywords
 from helpers.ner import analyze_ner
 from helpers.sentiment import analyze_sentiment
@@ -47,7 +46,7 @@ def analyze_text():
             "language": detect_language(text),
             "classification": classify_text(text),
             "coherence": analyze_coherence(text),
-            "grammar": grammar_analysis(text),
+            # "grammar": grammar_analysis(text),
             "summary": generate_summary(text),
             "bias": detect_bias(text),
             "tone": analyze_tone(text),
