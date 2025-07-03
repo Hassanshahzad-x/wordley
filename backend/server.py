@@ -61,11 +61,3 @@ def analyze_text():
             "error": "An error occurred while processing the text.",
             "details": str(e)
         }), 500
-
-
-@app.route("/test", methods=["GET"])
-def demo():
-    return jsonify({"hehe": "haha"})
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
