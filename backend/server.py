@@ -20,7 +20,7 @@ from helpers.language import detect_language
 from helpers.pos import analyze_pos
 
 app = Flask(__name__)
-CORS(app, origins=["https://wordleyai.netlify.app"])
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route("/", methods=["GET"])
@@ -72,5 +72,5 @@ def analyze_text():
         )
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 #     app.run(debug=True, port=5001)
