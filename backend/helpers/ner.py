@@ -1,12 +1,5 @@
 from collections import defaultdict
-import spacy
-import spacy.cli
-
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    spacy.cli.download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+from models.models import nlp
 
 
 ENTITY_FULL_FORMS = {
@@ -29,6 +22,7 @@ ENTITY_FULL_FORMS = {
     "ORDINAL": "Ordinal",
     "CARDINAL": "Cardinal Number",
 }
+
 
 def analyze_ner(text):
     doc = nlp(text)

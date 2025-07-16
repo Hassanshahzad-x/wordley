@@ -1,13 +1,6 @@
 from collections import Counter
 import re
-import spacy
-import spacy.cli
-
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    spacy.cli.download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+from models.models import nlp
 
 
 def extract_keywords(text):
@@ -28,11 +21,7 @@ def extract_keywords(text):
     max_freq = max(keyword_counts.values())
 
     keywords_json = [
-        {
-            "word": word,
-            "frequency": freq,
-            "weight": round(freq / max_freq, 2)
-        }
+        {"word": word, "frequency": freq, "weight": round(freq / max_freq, 2)}
         for word, freq in keyword_counts.items()
     ]
 

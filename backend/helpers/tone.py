@@ -1,13 +1,6 @@
-import spacy
 from nltk.tokenize import sent_tokenize, word_tokenize
 from textstat import textstat
-import spacy.cli
-
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    spacy.cli.download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+from models.models import nlp
 
 
 def count_passive_voice(sentences):
@@ -38,10 +31,12 @@ def analyze_tone(text):
     if exclamations + question_marks <= 1:
         formality_score += 1
 
-    tone.append({
-        "tone": "Formal" if formality_score >= 2 else "Informal",
-        "strength": "Strong" if formality_score == 3 else "Weak"
-    })
+    tone.append(
+        {
+            "tone": "Formal" if formality_score >= 2 else "Informal",
+            "strength": "Strong" if formality_score == 3 else "Weak",
+        }
+    )
 
     fk_grade = textstat.flesch_kincaid_grade(text)
     smog = textstat.smog_index(text)
@@ -52,9 +47,11 @@ def analyze_tone(text):
     if smog >= 10:
         analytical_score += 1
 
-    tone.append({
-        "tone": "Analytical" if analytical_score >= 1 else "Conversational",
-        "strength": "Strong" if analytical_score == 2 else "Weak"
-    })
+    tone.append(
+        {
+            "tone": "Analytical" if analytical_score >= 1 else "Conversational",
+            "strength": "Strong" if analytical_score == 2 else "Weak",
+        }
+    )
 
     return tone

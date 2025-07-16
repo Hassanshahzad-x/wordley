@@ -1,19 +1,32 @@
 import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
+
+API_URL = "https://api-inference.huggingface.co/models/distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+HEADERS = {
+    "Authorization": f"Bearer {os.getenv('HUGGING_FACE_API_KEY')}",
+    "Content-Type": "application/json",
+}
+
+
 def analyze_sentiment(text):
     print("Analyzing sentiment")
-    from huggingface_hub import InferenceClient
 
-    client = InferenceClient(
-        provider="hf-inference", api_key=f"{os.getenv('HUGGING_FACE_API_KEY')}"
-    )
+    response = requests.post(API_URL, headers=HEADERS, json={"inputs": text})
 
-    results = client.text_classification(
-        text,
-        model="distilbert/distilbert-base-uncased-finetuned-sst-2-english",
-    )
+    if response.status_code != 200:
+        raise RuntimeError(f"HF API Error: {response.status_code} - {response.text}")
+
+    results = response.json()
+
+    # Flatten if it's a nested list
+    if isinstance(results, list) and isinstance(results[0], list):
+        results = results[0]
+
+    if not isinstance(results, list) or not results or not isinstance(results[0], dict):
+        raise RuntimeError(f"Unexpected response format: {results}")
 
     top_result = results[0]
 
