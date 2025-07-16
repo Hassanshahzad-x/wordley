@@ -1,6 +1,35 @@
+import os
 import re
 import numpy as np
-import torch
+import requests
+from dotenv import load_dotenv
+
+# Load API key from .env
+# Load .env
+load_dotenv()
+API_KEY = os.getenv("HUGGING_FACE_API_KEY")
+
+API_URL = "https://router.huggingface.co/hf-inference/models/BAAI/bge-small-en-v1.5/pipeline/feature-extraction"
+headers = {"Authorization": f"Bearer {API_KEY}"}
+
+
+def get_sentence_embeddings(sentences):
+    if isinstance(sentences, str):
+        sentences = [sentences]
+
+    payload = {"inputs": sentences}
+    response = requests.post(API_URL, headers=headers, json=payload)
+
+    if response.status_code != 200:
+        raise RuntimeError(f"HF API Error: {response.status_code} - {response.text}")
+
+    return np.array(response.json())
+
+
+def cosine_sim(a, b):
+    a = a / np.linalg.norm(a, axis=-1, keepdims=True)
+    b = b / np.linalg.norm(b, axis=-1, keepdims=True)
+    return np.dot(a, b.T)
 
 
 def analyze_coherence(text):
@@ -8,7 +37,7 @@ def analyze_coherence(text):
     sentences = [s.strip() for s in sentences if s.strip()]
 
     embeddings = get_sentence_embeddings(sentences)
-    similarities = cosine_sim(embeddings.numpy(), embeddings.numpy())
+    similarities = cosine_sim(embeddings, embeddings)
 
     adjacent_similarities = [
         float(similarities[i][i + 1]) for i in range(len(sentences) - 1)
@@ -25,38 +54,7 @@ def analyze_coherence(text):
         description = "Low coherence, needs better structure and transitions"
 
     return {
-            "score": round(avg_score, 2),
-            "transitionCount": transitions,
-            "description": description,
+        "score": round(avg_score, 2),
+        "transitionCount": transitions,
+        "description": description,
     }
-
-
-def get_sentence_embeddings(sentences):
-    from transformers import AutoModel, AutoTokenizer
-    import gc
-
-    model_for_coherence = AutoModel.from_pretrained(
-        "sentence-transformers/all-MiniLM-L6-v2"
-    )
-
-    tokenizer_for_coherence = AutoTokenizer.from_pretrained(
-        "sentence-transformers/all-MiniLM-L6-v2"
-    )
-
-    inputs = tokenizer_for_coherence(
-        sentences, return_tensors="pt", padding=True, truncation=True
-    )
-    with torch.no_grad():
-        outputs = model_for_coherence(**inputs)
-    embeddings = outputs.last_hidden_state.mean(dim=1)
-
-    del model_for_coherence
-    gc.collect()
-
-    return embeddings
-
-
-def cosine_sim(a, b):
-    a = a / np.linalg.norm(a, axis=-1, keepdims=True)
-    b = b / np.linalg.norm(b, axis=-1, keepdims=True)
-    return np.dot(a, b.T)

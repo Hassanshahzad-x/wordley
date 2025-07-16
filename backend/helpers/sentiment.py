@@ -1,24 +1,25 @@
-def analyze_sentiment(text):
-    from transformers import pipeline
-    import gc
+import os
+from dotenv import load_dotenv
 
-    sentiment_pipeline = pipeline(
-        "text-classification",
-        model="cardiffnlp/twitter-roberta-base-sentiment-latest",
-        top_k=None
+load_dotenv()
+def analyze_sentiment(text):
+    from huggingface_hub import InferenceClient
+
+    client = InferenceClient(
+        provider="hf-inference", api_key=f"{os.getenv('HUGGING_FACE_API_KEY')}"
     )
 
-    results = sentiment_pipeline(text)[0]
-    scores = {res["label"].lower(): round(res["score"], 2) for res in results}
-    best = max(results, key=lambda x: x["score"])
+    results = client.text_classification(
+        text,
+        model="distilbert/distilbert-base-uncased-finetuned-sst-2-english",
+    )
+
+    top_result = results[0]
 
     sentiment = {
-        "confidence": round(best["score"], 2),
-        "label": best["label"].capitalize(),
-        "scores": scores,
+        "confidence": round(top_result["score"], 2),
+        "label": top_result["label"].capitalize(),
+        "scores": {top_result["label"].lower(): round(top_result["score"], 2)},
     }
-
-    del sentiment_pipeline
-    gc.collect()
 
     return sentiment

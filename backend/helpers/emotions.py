@@ -1,14 +1,18 @@
-def analyze_emotions(text):
-    from transformers import pipeline
-    import gc
+import os
 
-    model_for_emotions = pipeline(
-        "text-classification",
-        model="j-hartmann/emotion-english-distilroberta-base",
-        top_k=None
+from dotenv import load_dotenv
+
+load_dotenv()
+def analyze_emotions(text):
+    from huggingface_hub import InferenceClient
+
+    client = InferenceClient(
+        provider="hf-inference", api_key=f"{os.getenv('HUGGING_FACE_API_KEY')}"
     )
 
-    results = model_for_emotions(text)
+    results = client.text_classification(
+        text, model="j-hartmann/emotion-english-distilroberta-base"
+    )
 
     if isinstance(results[0], list):
         flat_results = [res for sublist in results for res in sublist]
@@ -19,8 +23,5 @@ def analyze_emotions(text):
         {"emotion": res["label"].lower(), "confidence": round(res["score"], 2)}
         for res in flat_results
     ]
-
-    del model_for_emotions
-    gc.collect()
 
     return emotions

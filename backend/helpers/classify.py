@@ -1,10 +1,11 @@
-def classify_text(text):
-    from transformers import pipeline
-    import gc
+import os
 
-    model_for_classification = pipeline(
-        "zero-shot-classification", model="facebook/bart-large-mnli"
-    )
+
+def classify_text(text):
+    import requests
+    from dotenv import load_dotenv
+
+    load_dotenv()
 
     candidate_labels = [
         "academic",
@@ -59,22 +60,35 @@ def classify_text(text):
         "product description",
     ]
 
-    result = model_for_classification(text, candidate_labels)
+    API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli"
 
-    main_category = result["labels"][0]
-    confidence = round(result["scores"][0], 2)
+    headers = {
+        "Authorization": f"Bearer {os.getenv('HUGGING_FACE_API_KEY')}",
+    }
 
-    temp_list = [
-        (label.lower(), round(score, 2))
-        for label, score in zip(result["labels"], result["scores"])
-    ]
-    scores = dict(temp_list[:3])
+    def query(payload):
+        response = requests.post(API_URL, headers=headers, json=payload)
+        return response.json()
 
-    del model_for_classification
-    gc.collect()
+    response = query(
+        {"inputs": text, "parameters": {"candidate_labels": candidate_labels}}
+    )
+
+    if "labels" not in response:
+        raise ValueError(f"API Error: {response}")
+
+    main_category = response["labels"][0]
+    confidence = round(response["scores"][0], 2)
+
+    top_3 = dict(
+        [
+            (label.lower(), round(score, 2))
+            for label, score in zip(response["labels"], response["scores"])
+        ][:3]
+    )
 
     return {
         "category": main_category.capitalize(),
         "confidence": confidence,
-        "scores": scores,
+        "scores": top_3,
     }
