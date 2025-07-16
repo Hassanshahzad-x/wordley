@@ -14,6 +14,7 @@ headers = {"Authorization": f"Bearer {API_KEY}"}
 
 
 def get_sentence_embeddings(sentences):
+    print("Analyzing coherence")
     if isinstance(sentences, str):
         sentences = [sentences]
 

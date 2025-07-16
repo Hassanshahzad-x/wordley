@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 def analyze_sentiment(text):
+    print("Analyzing sentiment")
     from huggingface_hub import InferenceClient
 
     client = InferenceClient(

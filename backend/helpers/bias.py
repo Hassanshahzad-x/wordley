@@ -6,6 +6,7 @@ load_dotenv()
 
 
 def detect_bias(text):
+    print("Analyzing bias")
     bias_labels = [
         "biased",
         "unbiased",

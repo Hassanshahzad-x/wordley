@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 def analyze_emotions(text):
+    print("Analyzing emotions")
     from huggingface_hub import InferenceClient
 
     client = InferenceClient(

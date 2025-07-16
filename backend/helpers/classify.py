@@ -2,6 +2,7 @@ import os
 
 
 def classify_text(text):
+    print("Analyzing classify")
     import requests
     from dotenv import load_dotenv
 

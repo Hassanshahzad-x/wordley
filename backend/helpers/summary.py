@@ -15,6 +15,7 @@ def trim_to_last_complete_sentence(text):
 
 
 def generate_summary(text):
+    print("Analyzing summary")
     word_count = len(text.split())
     if word_count < 30:
         return text.strip()
