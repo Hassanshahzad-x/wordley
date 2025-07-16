@@ -20,7 +20,7 @@ from helpers.language import detect_language
 from helpers.pos import analyze_pos
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://wordleyai.netlify.app"])
 
 @app.route("/analyze", methods=["POST"])
 def analyze_text():
