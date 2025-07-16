@@ -1,11 +1,11 @@
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 def detect_bias(text):
-    from transformers import pipeline
-    import gc
-
-    model_for_classification = pipeline(
-        "zero-shot-classification", model="facebook/bart-large-mnli"
-    )
-
     bias_labels = [
         "biased",
         "unbiased",
@@ -45,14 +45,24 @@ def detect_bias(text):
         "commentary",
     ]
 
-    result = model_for_classification(text, candidate_labels=bias_labels)
+    payload = {
+        "inputs": text,
+        "parameters": {"candidate_labels": bias_labels, "multi_label": True},
+    }
 
-    flagged_biases = [
+    API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli"
+    HEADERS = {"Authorization": f"Bearer {os.getenv('HUGGING_FACE_API_KEY')}"}
+
+    response = requests.post(API_URL, headers=HEADERS, json=payload)
+
+    if response.status_code != 200:
+        raise RuntimeError(f"HF API error: {response.status_code} - {response.text}")
+
+    result = response.json()
+
+    top_biases = [
         {"label": label, "confidence": round(score, 2)}
         for label, score in zip(result["labels"], result["scores"])
     ][:3]
 
-    del model_for_classification
-    gc.collect()
-
-    return flagged_biases
+    return top_biases
