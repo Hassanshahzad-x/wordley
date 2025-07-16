@@ -4,7 +4,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from helpers.basic_stats import analyze_basic_stats
-from helpers.bias import detect_bias
 from helpers.classify import classify_text
 from helpers.coherence import analyze_coherence
 from helpers.complexity import analyze_complexity

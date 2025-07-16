@@ -1,5 +1,4 @@
 from collections import defaultdict
-from models.models import nlp
 
 
 ENTITY_FULL_FORMS = {
@@ -25,6 +24,8 @@ ENTITY_FULL_FORMS = {
 
 
 def analyze_ner(text):
+    from models.models import nlp
+
     doc = nlp(text)
     entities = defaultdict(list)
 

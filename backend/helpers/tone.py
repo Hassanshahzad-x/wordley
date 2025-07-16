@@ -1,9 +1,10 @@
 from nltk.tokenize import sent_tokenize, word_tokenize
 from textstat import textstat
-from models.models import nlp
 
 
 def count_passive_voice(sentences):
+    from models.models import nlp
+
     passive_count = 0
     for sent in sentences:
         doc = nlp(sent)

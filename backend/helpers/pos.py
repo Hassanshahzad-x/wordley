@@ -1,7 +1,6 @@
-from models.models import nlp
-
-
 def analyze_pos(text):
+    from models.models import nlp
+
     doc = nlp(text)
     grouped = {}
     pos_tuples = [

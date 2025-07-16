@@ -1,9 +1,10 @@
 from collections import Counter
 import re
-from models.models import nlp
 
 
 def extract_keywords(text):
+    from models.models import nlp
+
     doc = nlp(text.lower())
     candidates = [
         token.lemma_
