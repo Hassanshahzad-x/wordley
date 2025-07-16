@@ -3,6 +3,7 @@ from langdetect import detect_langs
 
 
 def detect_language(text):
+    print("Analyzing language")
     detections = detect_langs(text)
     top_detection = detections[0]
     lang_code = top_detection.lang

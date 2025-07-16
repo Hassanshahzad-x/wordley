@@ -2,6 +2,7 @@ import re
 
 
 def analyze_basic_stats(text):
+    print("Analyzing basic stats")
     paragraphs = text.strip().split("\n\n")
     sentences = re.split(r"[.!?]+", text)
     words = text.split()

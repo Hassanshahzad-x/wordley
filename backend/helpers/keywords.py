@@ -1,10 +1,11 @@
 from collections import Counter
 import re
+from models.models import get_spacy_model
 
 
 def extract_keywords(text):
-    from models.models import nlp
-
+    print("Analyzing keywords")
+    nlp = get_spacy_model()
     doc = nlp(text.lower())
     candidates = [
         token.lemma_

@@ -1,10 +1,10 @@
 from nltk.tokenize import sent_tokenize, word_tokenize
 from textstat import textstat
+from models.models import get_spacy_model
 
 
 def count_passive_voice(sentences):
-    from models.models import nlp
-
+    nlp = get_spacy_model()
     passive_count = 0
     for sent in sentences:
         doc = nlp(sent)
@@ -16,6 +16,7 @@ def count_passive_voice(sentences):
 
 
 def analyze_tone(text):
+    print("Analyzing tone")
     sentences = sent_tokenize(text)
     long_sentences = [s for s in sentences if len(word_tokenize(s)) > 20]
     question_marks = text.count("?")

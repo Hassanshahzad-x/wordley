@@ -5,6 +5,7 @@ from textstat import textstat
 
 
 def analyze_writing_style(text):
+    print("Analyzing writing style")
     words = word_tokenize(text)
     sentences = sent_tokenize(text)
 

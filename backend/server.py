@@ -3,24 +3,8 @@ import traceback
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from helpers.basic_stats import analyze_basic_stats
-from helpers.classify import classify_text
-from helpers.coherence import analyze_coherence
-from helpers.bias import detect_bias
-from helpers.complexity import analyze_complexity
-from helpers.emotions import analyze_emotions
-from helpers.keywords import extract_keywords
-from helpers.ner import analyze_ner
-from helpers.sentiment import analyze_sentiment
-from helpers.summary import generate_summary
-from helpers.tone import analyze_tone
-from helpers.writing_style import analyze_writing_style
-from helpers.readability import analyze_readability
-from helpers.language import detect_language
-from helpers.pos import analyze_pos
-
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
 
 @app.route("/", methods=["GET"])
@@ -30,6 +14,22 @@ def health():
 
 @app.route("/analyze", methods=["POST"])
 def analyze_text():
+    from helpers.basic_stats import analyze_basic_stats
+    from helpers.classify import classify_text
+    from helpers.coherence import analyze_coherence
+    from helpers.bias import detect_bias
+    from helpers.complexity import analyze_complexity
+    from helpers.emotions import analyze_emotions
+    from helpers.keywords import extract_keywords
+    from helpers.ner import analyze_ner
+    from helpers.sentiment import analyze_sentiment
+    from helpers.summary import generate_summary
+    from helpers.tone import analyze_tone
+    from helpers.writing_style import analyze_writing_style
+    from helpers.readability import analyze_readability
+    from helpers.language import detect_language
+    from helpers.pos import analyze_pos
+
     try:
         data = request.get_json()
         text = data.get("text", "")

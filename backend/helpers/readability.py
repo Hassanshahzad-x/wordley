@@ -2,6 +2,7 @@ from textstat import textstat
 
 
 def analyze_readability(text):
+    print("Analyzing readability")
     flesch = textstat.flesch_reading_ease(text)
     grade = textstat.flesch_kincaid_grade(text)
     level = (

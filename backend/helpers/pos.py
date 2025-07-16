@@ -1,6 +1,8 @@
-def analyze_pos(text):
-    from models.models import nlp
+from models.models import get_spacy_model
 
+def analyze_pos(text):
+    print("Analyzing pos")
+    nlp = get_spacy_model()
     doc = nlp(text)
     grouped = {}
     pos_tuples = [

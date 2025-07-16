@@ -2,6 +2,7 @@ from textstat import textstat
 
 
 def analyze_complexity(text):
+    print("Analyzing complexity")
     lexical = min(100, int((len(set(text.split())) / max(1, len(text.split()))) * 100))
     syntactic = min(100, int(textstat.smog_index(text) * 5))
     semantic = min(100, int(textstat.flesch_kincaid_grade(text) * 3))

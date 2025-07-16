@@ -1,4 +1,5 @@
 from collections import defaultdict
+from models.models import get_spacy_model
 
 
 ENTITY_FULL_FORMS = {
@@ -24,8 +25,8 @@ ENTITY_FULL_FORMS = {
 
 
 def analyze_ner(text):
-    from models.models import nlp
-
+    print("Analyzing ner")
+    nlp = get_spacy_model()
     doc = nlp(text)
     entities = defaultdict(list)
 
