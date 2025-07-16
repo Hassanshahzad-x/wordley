@@ -22,6 +22,12 @@ from helpers.pos import analyze_pos
 app = Flask(__name__)
 CORS(app, origins=["https://wordleyai.netlify.app"])
 
+
+@app.route("/", methods=["GET"])
+def health():
+    return jsonify({"status": "SERVER IS UP AND RUNNING"}), 200
+
+
 @app.route("/analyze", methods=["POST"])
 def analyze_text():
     try:
@@ -51,11 +57,20 @@ def analyze_text():
             "readingTime": round(len(text.split()) / 200),
         }
 
-        return jsonify(result)
+        return jsonify(result), 200
     except Exception as e:
         traceback.print_exc()
 
-        return jsonify({
-            "error": "An error occurred while processing the text.",
-            "details": str(e)
-        }), 500
+        return (
+            jsonify(
+                {
+                    "error": "An error occurred while processing the text.",
+                    "details": str(e),
+                }
+            ),
+            500,
+        )
+
+
+if __name__ == "__main__":
+#     app.run(debug=True, port=5001)
