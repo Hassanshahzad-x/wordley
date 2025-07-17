@@ -1,8 +1,6 @@
 import nltk
 from spacy.util import load_model
 
-nltk.download("punkt")
-nltk.download("stopwords")
 MODEL_NAME = "en_core_web_sm"
 _model_cache = {}
 

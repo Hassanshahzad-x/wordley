@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN python -m nltk.downloader punkt punkt_tab stopwords
+
 COPY . .
 
 EXPOSE 8080
