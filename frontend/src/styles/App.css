@@ -18,8 +18,8 @@
   
   /* Neutral colors */
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
+  --bg-secondary: #e1e6ec;
+  --bg-tertiary: #e1e6ec;
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
@@ -192,7 +192,7 @@ body {
 
 /* Panel Styles */
 .panel {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 1rem;
   overflow: hidden;

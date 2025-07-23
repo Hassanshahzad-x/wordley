@@ -19,6 +19,7 @@ function App() {
   const [analysis, setAnalysis] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [error, setError] = useState("");
 
   function startAnalyzing() {
     if (!text.trim()) {
@@ -35,11 +36,20 @@ function App() {
         },
         body: JSON.stringify({ text: text }),
       })
-        .then((res) => res.json())
+        .then(async (res) => {
+          if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(errorText || "Server returned an error");
+          }
+          return res.json();
+        })
         .then((data) => {
           setAnalysis(data);
         })
-        .catch((err) => {})
+        .catch((err) => {
+          console.log("ERROR", err || err.message);
+          setError(err || err.message);
+        })
         .finally(() => {
           setIsAnalyzing(false);
         });
@@ -83,7 +93,7 @@ function App() {
         <div className="header-content">
           <div className="logo">
             <Brain className="logo-icon" />
-            <h1>Wordley</h1>
+            <h1>Wordley.ai</h1>
             <span className="logo-subtitle">AI-Powered Text Intelligence</span>
           </div>
           <div className="header-actions">
@@ -175,7 +185,7 @@ function App() {
             <AnalysisPanel
               analysis={analysis}
               isAnalyzing={isAnalyzing}
-              isDarkMode={isDarkMode}
+              error={error}
             />
           </div>
         </div>
@@ -183,9 +193,7 @@ function App() {
 
       <footer className="app-footer">
         <div className="footer-content">
-          <p>
-            Powered by Advanced NLP Algorithms • Real-time Text Intelligence
-          </p>
+          <p>Powered by Advanced NLP Algorithms</p>
         </div>
       </footer>
     </div>

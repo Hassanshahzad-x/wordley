@@ -5,35 +5,30 @@ import {
   Key,
   Clock,
   BookOpen,
-  Globe,
   User,
   BarChart3,
   Brain,
-  Pen,
   Text,
   SearchCode,
   HelpCircle,
   Cable,
-  Orbit,
-  Scan,
   WholeWord,
   Languages,
-  LucideWholeWord,
   Link2Icon,
   Repeat,
-  DiffIcon,
   FileDiff,
   LucideNavigation,
   Component,
-  TextCursor,
   BookMarked,
   Speech,
+  PersonStanding,
+  SpeechIcon,
 } from "lucide-react";
 import SentimentChart from "./charts/SentimentChart";
 import EmotionChart from "./charts/EmotionChart";
 import "../styles/AnalysisPanel.css";
 
-const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
+const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
   const [activeTab, setActiveTab] = useState("overview");
 
   if (isAnalyzing) {
@@ -41,6 +36,16 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
       <div className="analysis-loading">
         <div className="loading-spinner"></div>
         <p>Analyzing your text with AI, this might take few minutes...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="analysis-loading">
+        <p style={{ color: "red", fontSize: "10px" }}>
+          Connection Error, please try again
+        </p>
       </div>
     );
   }
@@ -60,6 +65,14 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
             <span>Sentiment Analysis</span>
           </div>
           <div className="feature-item">
+            <User size={20} />
+            <span>Named Entities</span>
+          </div>
+          <div className="feature-item">
+            <Speech size={20} />
+            <span>Parts of Speech Tagging</span>
+          </div>
+          <div className="feature-item">
             <Heart size={20} />
             <span>Emotion Detection</span>
           </div>
@@ -68,8 +81,16 @@ const AnalysisPanel = ({ analysis, isAnalyzing, isDarkMode }) => {
             <span>Keyword Extraction</span>
           </div>
           <div className="feature-item">
+            <SearchCode size={20} />
+            <span>Text Classification</span>
+          </div>
+          <div className="feature-item">
             <BookOpen size={20} />
-            <span>Readability Analysis</span>
+            <span>Style & Readability Analysis</span>
+          </div>
+          <div className="feature-item">
+            <Text size={20} />
+            <span>Summary</span>
           </div>
         </div>
       </div>
@@ -692,7 +713,7 @@ const POS_FULL_FORMS = {
   SPACE: "Space",
   VERB: "Verb",
   X: "Other",
-  SYM: "SYMBOL"
+  SYM: "SYMBOL",
 };
 
 const posColors = {
