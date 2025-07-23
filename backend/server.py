@@ -1,10 +1,12 @@
 import traceback
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from concurrent.futures import ThreadPoolExecutor
 
 app = Flask(__name__)
 CORS(app)
+
+executor = ThreadPoolExecutor()
 
 
 @app.route("/", methods=["GET"])
@@ -35,41 +37,37 @@ def analyze_text():
         text = data.get("text", "")
 
         if not text.strip():
-            return jsonify({"error": "Text is empty"}), 400
+            return {"error": "No text found"}, 400
 
-        result = {
-            "basicStats": analyze_basic_stats(text),
-            "sentiment": analyze_sentiment(text),
-            "emotions": analyze_emotions(text),
-            "entities": analyze_ner(text),
-            "pos": analyze_pos(text),
-            "keywords": extract_keywords(text),
-            "readability": analyze_readability(text),
-            "language": detect_language(text),
-            "classification": classify_text(text),
-            "coherence": analyze_coherence(text),
-            # "grammar": grammar_analysis(text),
-            "summary": generate_summary(text),
-            "bias": detect_bias(text),
-            "tone": analyze_tone(text),
-            "writingStyle": analyze_writing_style(text),
-            "complexity": analyze_complexity(text),
-            "readingTime": round(len(text.split()) / 200),
+        analysis = {
+            "basicStats": executor.submit(analyze_basic_stats, text),
+            "sentiment": executor.submit(analyze_sentiment, text),
+            "emotions": executor.submit(analyze_emotions, text),
+            "entities": executor.submit(analyze_ner, text),
+            "pos": executor.submit(analyze_pos, text),
+            "keywords": executor.submit(extract_keywords, text),
+            "readability": executor.submit(analyze_readability, text),
+            "language": executor.submit(detect_language, text),
+            "classification": executor.submit(classify_text, text),
+            "coherence": executor.submit(analyze_coherence, text),
+            "summary": executor.submit(generate_summary, text),
+            "bias": executor.submit(detect_bias, text),
+            "tone": executor.submit(analyze_tone, text),
+            "writingStyle": executor.submit(analyze_writing_style, text),
+            "complexity": executor.submit(analyze_complexity, text),
         }
+
+        result = {}
+        for key, future in analysis.items():
+            result_value = future.result()
+            result[key] = result_value
+
+        result["readingTime"] = round(len(text.split()) / 200)
 
         return jsonify(result), 200
     except Exception as e:
         traceback.print_exc()
-
-        return (
-            jsonify(
-                {
-                    "error": "An error occurred while processing the text.",
-                    "details": str(e),
-                }
-            ),
-            500,
-        )
+        return {"error": str(e)}, 500
 
 
 if __name__ == "__main__":
