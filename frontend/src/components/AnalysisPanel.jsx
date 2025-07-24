@@ -204,7 +204,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
               <div className="metrics-grid">
                 {analysis.tone.map((entry) => {
                   return (
-                    <div className="metric-card">
+                    <div key={entry.tone} className="metric-card">
                       <div className="metric-value">{entry.tone}</div>
                       <div className="metric-detail">
                         Strength: {entry.strength}
@@ -527,7 +527,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
                               analysis.classification.category.toLowerCase()
                           )
                           .map(([label]) => (
-                            <span className="entity-tag">
+                            <span key={label} className="entity-tag">
                               {label.charAt(0).toUpperCase() + label.slice(1)}
                             </span>
                           ))}
@@ -571,32 +571,38 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
                 </p>
               </div>
 
-              {/* <div className="metric-section">
-                <h3>Grammar Analysis</h3>
-                <div className="grammar-results">
-                  <div className="coherence-score">
-                    <span
-                      className="score"
-                      style={{
-                        color: "green",
-                      }}
-                    >
-                      {analysis.grammar.score}
-                    </span>
-                    <span className="label">Grammar Score</span>
-                  </div>
-                  {analysis.grammar.issues.length > 0 && (
-                    <div className="grammar-issues">
-                      <h4>Potential Issues:</h4>
-                      <ul>
-                        {analysis.grammar.issues.map((issue, index) => (
-                          <li key={index}>{issue}</li>
-                        ))}
-                      </ul>
+              <div className="metric-section">
+                <h3>Bias</h3>
+                <div className="entities-section">
+                  <div className="entities-grid">
+                    <div className="entity-group">
+                      <h4>Primary</h4>
+                      <div className="entity-tags">
+                        <span className="entity-tag">
+                          {analysis.bias[0].label.charAt(0).toUpperCase() +
+                            analysis.bias[0].label.slice(1)}
+                        </span>
+                      </div>
                     </div>
-                  )}
+
+                    <div className="entity-group">
+                      <h4>Secondary</h4>
+                      <div className="entity-tags">
+                        {analysis.bias
+                          .filter(
+                            (bias) => bias.label != analysis.bias[0].label
+                          )
+                          .map((bias) => (
+                            <span key={bias.label} className="entity-tag">
+                              {bias.label.charAt(0).toUpperCase() +
+                                bias.label.slice(1)}
+                            </span>
+                          ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
         );
