@@ -361,20 +361,21 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
                         className="help-icon"
                       />
                       <span className="tooltip-text">
-                        A readability score <b>(0–100)</b> based on sentence
-                        length and syllable count.
+                        Readability reflects how easy the text is to read based
+                        on sentence length and syllable complexity.
                         <br />
                         <br />
-                        <b>Ideal Scores:</b>
-                        <li>
-                          60–70 (easily understood by 13 - to 15-year-olds)
-                        </li>
-                        <li>80–100 (very easy to read)</li>
-                        <li>
-                          30–50 (difficult but okay for academic or technical
-                          writing)
-                        </li>
-                        <li>Below 30 (very hard to read)</li>
+                        <strong>80 – 100</strong> is very easy to read
+                        (understood by most readers).
+                        <br />
+                        <strong>60 – 79</strong> is ideal for general audiences
+                        (ages 13–15).
+                        <br />
+                        <strong>30 – 59</strong> is harder to read but fine for
+                        academic or technical content.
+                        <br />
+                        Below <strong>30</strong> is very difficult and likely
+                        needs simplification.
                       </span>
                     </span>
                   </span>
@@ -551,12 +552,17 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
                     <span className="tooltip-text">
                       Coherence measures how logically connected and
                       easy-to-follow the text is. It looks at how well sentences
-                      flow together and if the message builds smoothly.
+                      flow together and whether the message builds smoothly.
                       <br />
                       <br />
-                      <strong>70 – 100</strong> is considered good. <br />
-                      Below <strong>50</strong> suggests poor transitions or
-                      disconnected ideas.
+                      <strong>70 – 100</strong> means it's well-organized and
+                      easy to follow.
+                      <br />
+                      <strong>50 – 69</strong> indicates decent structure but
+                      could improve transitions.
+                      <br />
+                      Below <strong>50</strong> suggests disjointed or confusing
+                      flow.
                     </span>
                   </span>
                 </h3>
@@ -660,39 +666,58 @@ const getSemanticDescription = (factor) => {
   const descriptions = {
     lexical: (
       <>
-        Refers to the vocabulary difficulty — how rare, sophisticated, or varied
-        the words are.
+        Looks at how advanced or varied the vocabulary is.
         <br />
         <br />
         <ul style={{ paddingLeft: "1.2rem" }}>
-          <li>20 – 50: balanced vocabulary</li>
-          <li>&gt; 60: advanced or technical (may hurt readability)</li>
-          <li>&lt; 20: too basic or repetitive</li>
+          <li>
+            <strong>20 – 50</strong>: A good balance of everyday and rich words
+          </li>
+          <li>
+            <strong>&gt; 60</strong>: More advanced or technical (could affect
+            readability)
+          </li>
+          <li>
+            <strong>&lt; 20</strong>: Too simple or repetitive
+          </li>
         </ul>
       </>
     ),
     semantic: (
       <>
-        Measures how conceptually dense or abstract the ideas are.
+        Measures how abstract or concept-heavy the ideas are.
         <br />
         <br />
         <ul style={{ paddingLeft: "1.2rem" }}>
-          <li>30 – 60: good for general communication</li>
-          <li>&gt; 60: more nuanced/abstract (okay for experts)</li>
-          <li>&lt; 30: simple and direct</li>
+          <li>
+            <strong>30 – 60</strong>: Well-balanced for most audiences
+          </li>
+          <li>
+            <strong>&gt; 60</strong>: More abstract or layered (better suited
+            for experts)
+          </li>
+          <li>
+            <strong>&lt; 30</strong>: Very simple and direct
+          </li>
         </ul>
       </>
     ),
     syntactic: (
       <>
-        Refers to the complexity of sentence structures — use of clauses,
-        conjunctions, and length.
+        Looks at how complex the sentence structures are — things like clause
+        depth and sentence length.
         <br />
         <br />
         <ul style={{ paddingLeft: "1.2rem" }}>
-          <li>30 – 60: clear and rich sentence construction</li>
-          <li>&gt; 70: may become hard to follow</li>
-          <li>&lt; 30: may sound choppy or oversimplified</li>
+          <li>
+            <strong>30 – 60</strong>: Clear, varied, and well-structured
+          </li>
+          <li>
+            <strong>&gt; 70</strong>: Might get hard to follow
+          </li>
+          <li>
+            <strong>&lt; 30</strong>: May feel flat, choppy, or too basic
+          </li>
         </ul>
       </>
     ),

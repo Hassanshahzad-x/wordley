@@ -4,17 +4,14 @@ import numpy as np
 import requests
 from dotenv import load_dotenv
 
-# Load API key from .env
-# Load .env
 load_dotenv()
-API_KEY = os.getenv("HUGGING_FACE_API_KEY")
 
+HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY")
 API_URL = "https://router.huggingface.co/hf-inference/models/BAAI/bge-small-en-v1.5/pipeline/feature-extraction"
-headers = {"Authorization": f"Bearer {API_KEY}"}
+headers = {"Authorization": f"Bearer {HUGGING_FACE_API_KEY}"}
 
 
 def get_sentence_embeddings(sentences):
-    print("Analyzing coherence")
     if isinstance(sentences, str):
         sentences = [sentences]
 
@@ -28,15 +25,17 @@ def get_sentence_embeddings(sentences):
 
 
 def cosine_sim(a, b):
-    a = a / np.linalg.norm(a, axis=-1, keepdims=True)
-    b = b / np.linalg.norm(b, axis=-1, keepdims=True)
-    return np.dot(a, b.T)
+    eps = 1e-10
+    a_norm = a / (np.linalg.norm(a, axis=-1, keepdims=True) + eps)
+    b_norm = b / (np.linalg.norm(b, axis=-1, keepdims=True) + eps)
+    return np.dot(a_norm, b_norm.T)
 
 
 def analyze_coherence(text):
-    sentences = re.split(r"(?<=[.!?]) +", text.strip())
-    sentences = [s.strip() for s in sentences if s.strip()]
+    print("Analyzing coherence")
 
+    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+    sentences = [s.strip() for s in sentences if s.strip()]
     embeddings = get_sentence_embeddings(sentences)
     similarities = cosine_sim(embeddings, embeddings)
 
@@ -45,7 +44,7 @@ def analyze_coherence(text):
     ]
 
     avg_score = float(np.mean(adjacent_similarities))
-    transitions = sum(1 for score in adjacent_similarities if score < 0.5)
+    transitions = sum(1 for score in adjacent_similarities if score >= 0.5)
 
     if avg_score > 0.70:
         description = "Highly coherent and well-structured"

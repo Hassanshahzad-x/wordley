@@ -27,6 +27,7 @@ function App() {
       return;
     }
 
+    setError("");
     setIsAnalyzing(true);
     const timer = setTimeout(() => {
       fetch(`${backendURL}/analyze`, {
