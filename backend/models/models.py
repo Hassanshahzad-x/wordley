@@ -1,4 +1,3 @@
-import nltk
 from spacy.util import load_model
 
 MODEL_NAME = "en_core_web_sm"

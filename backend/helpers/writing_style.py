@@ -1,5 +1,4 @@
 import re
-
 from nltk import word_tokenize, sent_tokenize
 from textstat import textstat
 
@@ -10,6 +9,7 @@ def analyze_writing_style(text):
     sentences = sent_tokenize(text)
 
     words_clean = [w.lower() for w in words if re.match(r"\w+", w)]
+    words_clean = [word.replace("-", " ") for word in words_clean]
     vocab = set(words_clean)
     vocab_diversity = round(len(vocab) / len(words_clean) * 100) if words_clean else 0
 
@@ -37,9 +37,9 @@ def analyze_writing_style(text):
     )
 
     return {
-            "style": style,
-            "vocabularyDiversity": vocab_diversity,
-            "avgWordsPerSentence": avg_words_per_sentence,
-            "sentenceVariety": sentence_variety,
-            "wordComplexity": {"simple": simple_pct, "complex": complex_pct},
+        "style": style,
+        "vocabularyDiversity": vocab_diversity,
+        "avgWordsPerSentence": avg_words_per_sentence,
+        "sentenceVariety": sentence_variety,
+        "wordComplexity": {"simple": simple_pct, "complex": complex_pct},
     }

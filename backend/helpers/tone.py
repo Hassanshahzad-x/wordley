@@ -1,6 +1,17 @@
 from nltk.tokenize import sent_tokenize, word_tokenize
 from textstat import textstat
 from models.models import get_spacy_model
+import re
+from nltk.corpus import cmudict
+
+cmu = cmudict.dict()
+
+def clean_text_for_textstat(text):
+    text = text.replace("-", " ")
+    text = re.sub(r"\s+", " ", text).strip()
+    words = re.findall(r"\b\w+\b", text)
+    known_words = [word for word in words if word.lower() in cmu]
+    return " ".join(known_words)
 
 
 def count_passive_voice(sentences):
@@ -40,8 +51,18 @@ def analyze_tone(text):
         }
     )
 
-    fk_grade = textstat.flesch_kincaid_grade(text)
-    smog = textstat.smog_index(text)
+    cleaned = clean_text_for_textstat(text)
+
+    try:
+        fk_grade = textstat.flesch_kincaid_grade(cleaned)
+    except:
+        fk_grade = 0
+
+    try:
+        smog = textstat.smog_index(cleaned)
+    except:
+        smog = 0
+
     analytical_score = 0
 
     if fk_grade >= 12:
