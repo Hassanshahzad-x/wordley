@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 app = Flask(__name__)
 CORS(app)
 
-executor = ThreadPoolExecutor()
+executor = ThreadPoolExecutor(max_workers=4)
 
 
 @app.route("/", methods=["GET"])
@@ -39,17 +39,23 @@ def analyze_text():
         if not text.strip():
             return {"error": "No text found"}, 400
 
-        analysis = {
+        batch1 = {
             "basicStats": executor.submit(analyze_basic_stats, text),
             "sentiment": executor.submit(analyze_sentiment, text),
             "emotions": executor.submit(analyze_emotions, text),
             "entities": executor.submit(analyze_ner, text),
             "pos": executor.submit(analyze_pos, text),
+        }
+
+        batch2 = {
             "keywords": executor.submit(extract_keywords, text),
             "readability": executor.submit(analyze_readability, text),
             "language": executor.submit(detect_language, text),
             "classification": executor.submit(classify_text, text),
             "coherence": executor.submit(analyze_coherence, text),
+        }
+
+        batch3 = {
             "summary": executor.submit(generate_summary, text),
             "bias": executor.submit(detect_bias, text),
             "tone": executor.submit(analyze_tone, text),
@@ -58,9 +64,10 @@ def analyze_text():
         }
 
         result = {}
-        for key, future in analysis.items():
-            result_value = future.result()
-            result[key] = result_value
+
+        for batch in [batch1, batch2, batch3]:
+            for key, future in batch.items():
+                result[key] = future.result()
 
         result["readingTime"] = round(len(text.split()) / 200)
 
