@@ -3,6 +3,13 @@ from nltk import word_tokenize, sent_tokenize
 from textstat import textstat
 
 
+def safe_syllable_count(word):
+    try:
+        return textstat.syllable_count(word)
+    except KeyError:
+        return 1
+
+
 def analyze_writing_style(text):
     print("Analyzing writing style")
     words = word_tokenize(text)
@@ -24,8 +31,8 @@ def analyze_writing_style(text):
         "long": sum(1 for l in sentence_lengths if l > 20),
     }
 
-    simple = sum(1 for w in words_clean if textstat.syllable_count(w) <= 2)
-    complex_ = sum(1 for w in words_clean if textstat.syllable_count(w) > 2)
+    simple = sum(1 for w in words_clean if safe_syllable_count(w) <= 2)
+    complex_ = sum(1 for w in words_clean if safe_syllable_count(w) > 2)
     total_words = simple + complex_
     simple_pct = round((simple / total_words) * 100) if total_words else 0
     complex_pct = round((complex_ / total_words) * 100) if total_words else 0

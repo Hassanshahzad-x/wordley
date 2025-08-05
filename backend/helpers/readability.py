@@ -6,8 +6,6 @@ cmu = cmudict.dict()
 
 
 def clean_text_for_textstat(text):
-    text = text.replace("-", " ")
-    text = re.sub(r"\s+", " ", text).strip()
     words = re.findall(r"\b\w+\b", text)
     known_words = [word for word in words if word.lower() in cmu]
     return " ".join(known_words)

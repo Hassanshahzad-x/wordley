@@ -381,7 +381,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
                   </span>
                 </div>
                 <div className="metric-value">
-                  {analysis.readability.fleschScore.toFixed(1)}
+                  {analysis.readability.fleschScore.toFixed(0)}
                 </div>
               </div>
 
@@ -402,7 +402,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
                   <span>Average Sentence Length</span>
                 </div>
                 <div className="metric-value">
-                  {analysis.readability.avgSentenceLength.toFixed(1)} words
+                  {analysis.readability.avgSentenceLength.toFixed(0)} words
                 </div>
                 <div className="metric-detail">
                   Syllable count: {analysis.readability.syllableCount}
