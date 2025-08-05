@@ -15,4 +15,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["python", "server.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "server:app"]
