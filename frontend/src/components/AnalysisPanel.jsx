@@ -381,7 +381,7 @@ const AnalysisPanel = ({ analysis, isAnalyzing, error }) => {
                   </span>
                 </div>
                 <div className="metric-value">
-                  {analysis.readability.fleschScore.toFixed(0)}
+                  {analysis.readability.fleschScore.toFixed(0) + 100}
                 </div>
               </div>
 
