@@ -1,4 +1,10 @@
 __pycache__
 *.pyc
-.env
-.git
+*.pkl
+*.pdf
+*.docx
+*.txt
+/uploads
+data/
+tmp/
+.ipynb_checkpoints/
